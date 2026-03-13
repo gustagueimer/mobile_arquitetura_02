@@ -1,16 +1,27 @@
 import '../../domain/repositories/product_repository.dart';
-import '../../domain/entities/product.dart';
+import './product_state.dart';
 import 'package:flutter/foundation.dart';
 
 class ProductViewModel {
   final ProductRepository repository;
 
-  final ValueNotifier<List<Product>> products = ValueNotifier([]);
+  final ValueNotifier<ProductState> state = ValueNotifier(const ProductState());
 
   ProductViewModel(this.repository);
 
   Future<void> loadProducts() async {
-    final result = await repository.getProducts();
-    products.value = result;
+    state.value = state.value.copyWith(isLoading: true);
+    try {
+      final products = await repository.getProducts();
+      state.value = state.value.copyWith(
+        isLoading: false,
+        products: products,
+      );
+    } catch (e) {
+      state.value = state.value.copyWith(
+        isLoading: false,
+        error: e.toString(),
+      );
+    }
   }
 }
