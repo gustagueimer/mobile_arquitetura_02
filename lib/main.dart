@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:product_app/features/product/data/datasources/product_cache_datasource.dart';
 import 'package:product_app/features/product/data/datasources/product_remote_datasource.dart';
 import 'package:product_app/features/product/data/repositories/product_repository_impl.dart';
 import 'package:product_app/features/product/presentation/pages/product_page.dart';
@@ -22,7 +23,8 @@ class AppRoot extends StatelessWidget {
                           ProductRepositoryImpl(
                             ProductRemoteDatasource(
                               Client()
-                            )
+                            ),
+                            ProductCacheDatasource()
                           )  
                         )
             ),
